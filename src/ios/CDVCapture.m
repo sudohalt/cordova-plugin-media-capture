@@ -223,6 +223,7 @@
     // taking more than one video (limit) is only supported if provide own controls via cameraOverlayView property
     NSNumber* duration = [options objectForKey:@"duration"];
     NSString* mediaType = nil;
+    NSString *prompt = [options objectForKey:@"prompt"];
 
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         // there is a camera, it is available, make sure it can do movies
@@ -267,6 +268,18 @@
             // pickerController.cameraDevice = UIImagePickerControllerCameraDeviceRear;
             // pickerController.cameraFlashMode = UIImagePickerControllerCameraFlashModeAuto;
         }
+
+	// Create a prompt to display over camera view
+	if (prompt != nil) {
+	    int width = self.viewController.view.bounds.size.width;
+            int height = self.viewController.view.bounds.size.height;
+	    UILabel *promptLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 80, width, 40)]; 
+	    promptLabel.text = prompt;
+            promptLabel.textColor = [UIColor whiteColor];
+            [promptLabel setTextAlignment:NSTextAlignmentCenter];
+            [pickerController.view addSubview:promptLabel];
+        }
+
         // CDVImagePicker specific property
         pickerController.callbackId = callbackId;
 
