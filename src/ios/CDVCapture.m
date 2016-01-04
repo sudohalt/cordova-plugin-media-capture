@@ -82,6 +82,18 @@
     self.inUse = NO;
 }
 
+// This function allows us to use the new bounds of the view
+- (void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    // reorient the prompt
+    if (self.promptLabel) {
+        int width = self.viewController.view.bounds.size.width;
+        int height = self.viewController.view.bounds.size.height;
+        self.promptLabel.frame = initWithFrame:CGRectMake(0, 80, width, 40)
+    }
+    
+}
+
 - (void)captureAudio:(CDVInvokedUrlCommand*)command
 {
     NSString* callbackId = command.callbackId;
@@ -269,13 +281,14 @@
             // pickerController.cameraFlashMode = UIImagePickerControllerCameraFlashModeAuto;
         }
 
-	// Create a prompt to display over camera view
-	if (prompt != nil) {
-	    int width = self.viewController.view.bounds.size.width;
+    	// Create a prompt to display over camera view
+    	if (prompt) {
+    	    int width = self.viewController.view.bounds.size.width;
             int height = self.viewController.view.bounds.size.height;
-	    UILabel *promptLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 80, width, 40)]; 
-	    promptLabel.text = prompt;
+    	    self.promptLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 80, width, 40)]; 
+    	    promptLabel.text = prompt;
             promptLabel.textColor = [UIColor whiteColor];
+            promptLabel.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.70];
             [promptLabel setTextAlignment:NSTextAlignmentCenter];
             [pickerController.view addSubview:promptLabel];
         }

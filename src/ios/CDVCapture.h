@@ -41,6 +41,7 @@ typedef NSUInteger CDVCaptureError;
 @property (assign) NSInteger quality;
 @property (copy)   NSString* callbackId;
 @property (copy)   NSString* mimeType;
+@property UILabel *promptLabel;
 
 @end
 
