@@ -89,7 +89,7 @@
     if (self.promptLabel) {
         int width = self.viewController.view.bounds.size.width;
         int height = self.viewController.view.bounds.size.height;
-        self.promptLabel.frame = initWithFrame:CGRectMake(0, 80, width, 40)
+        self.promptLabel.frame = CGRectMake(0, 80, width, 40);
     }
     
 }
@@ -286,11 +286,11 @@
     	    int width = self.viewController.view.bounds.size.width;
             int height = self.viewController.view.bounds.size.height;
     	    self.promptLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 80, width, 40)]; 
-    	    promptLabel.text = prompt;
-            promptLabel.textColor = [UIColor whiteColor];
-            promptLabel.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.70];
-            [promptLabel setTextAlignment:NSTextAlignmentCenter];
-            [pickerController.view addSubview:promptLabel];
+    	    self.promptLabel.text = prompt;
+            self.promptLabel.textColor = [UIColor whiteColor];
+            self.promptLabel.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.70];
+            [self.promptLabel setTextAlignment:NSTextAlignmentCenter];
+            [pickerController.view addSubview:self.promptLabel];
         }
 
         // CDVImagePicker specific property

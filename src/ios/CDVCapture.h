@@ -41,7 +41,7 @@ typedef NSUInteger CDVCaptureError;
 @property (assign) NSInteger quality;
 @property (copy)   NSString* callbackId;
 @property (copy)   NSString* mimeType;
-@property UILabel *promptLabel;
+
 
 @end
 
@@ -50,6 +50,7 @@ typedef NSUInteger CDVCaptureError;
     CDVImagePicker* pickerController;
     BOOL inUse;
 }
+@property UILabel *promptLabel;
 @property BOOL inUse;
 - (void)captureAudio:(CDVInvokedUrlCommand*)command;
 - (void)captureImage:(CDVInvokedUrlCommand*)command;
