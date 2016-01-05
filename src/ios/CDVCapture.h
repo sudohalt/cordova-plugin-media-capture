@@ -50,6 +50,7 @@ typedef NSUInteger CDVCaptureError;
     CDVImagePicker* pickerController;
     BOOL inUse;
 }
+@property CGFloat resetTransform;
 @property UILabel *promptLabel;
 @property BOOL inUse;
 - (void)captureAudio:(CDVInvokedUrlCommand*)command;

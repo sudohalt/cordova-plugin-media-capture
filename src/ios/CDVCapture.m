@@ -83,13 +83,36 @@
 }
 
 // This function allows us to use the new bounds of the view
-- (void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void) didRotateDeviceChangeNotification:(NSNotification *)notification
 {
     // reorient the prompt
     if (self.promptLabel) {
+        UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
         int width = self.viewController.view.bounds.size.width;
-        int height = self.viewController.view.bounds.size.height;
-        self.promptLabel.frame = CGRectMake(0, 80, width, 40);
+        int centerX = self.viewController.view.center.x;
+        int centerY = self.viewController.view.center.y;
+        switch (orientation) {
+            case UIDeviceOrientationLandscapeLeft:
+                [self.promptLabel setTransform:CGAffineTransformIdentity];
+                [self.promptLabel setTransform:CGAffineTransformMakeRotation(M_PI_2)];
+                [self.promptLabel setCenter:CGPointMake(width - 80, centerY)];
+                break;
+            case UIDeviceOrientationLandscapeRight:
+                [self.promptLabel setTransform:CGAffineTransformIdentity];
+                [self.promptLabel setTransform:CGAffineTransformMakeRotation(-M_PI_2)];
+                [self.promptLabel setCenter:CGPointMake(80, centerY)];
+                break;
+            case UIDeviceOrientationPortrait:
+                [self.promptLabel setTransform:CGAffineTransformIdentity];
+                [self.promptLabel setCenter:CGPointMake(centerX, 80)];
+                break;
+            case UIDeviceOrientationPortraitUpsideDown:
+                [self.promptLabel setTransform:CGAffineTransformIdentity];
+                [self.promptLabel setCenter:CGPointMake(centerX, 80)];
+                break;
+            default:
+                break;
+        }
     }
     
 }
@@ -281,16 +304,28 @@
             // pickerController.cameraFlashMode = UIImagePickerControllerCameraFlashModeAuto;
         }
 
-    	// Create a prompt to display over camera view
-    	if (prompt) {
-    	    int width = self.viewController.view.bounds.size.width;
-            int height = self.viewController.view.bounds.size.height;
-    	    self.promptLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 80, width, 40)]; 
-    	    self.promptLabel.text = prompt;
+        // Create a prompt to display over camera view
+        if (prompt) {
+            // Add a little padding to prompt text
+            prompt = [NSString stringWithFormat:@"   %@   ", prompt];
+            int centerX = self.viewController.view.center.x;
+            self.promptLabel = [[UILabel alloc] init];
+            self.promptLabel.text = prompt;
             self.promptLabel.textColor = [UIColor whiteColor];
-            self.promptLabel.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.70];
+            self.promptLabel.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.30];
             [self.promptLabel setTextAlignment:NSTextAlignmentCenter];
+            self.promptLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+            self.promptLabel.numberOfLines = 0;
+            [self.promptLabel sizeToFit];
+            [self.promptLabel setCenter:CGPointMake(centerX, 80)];
             [pickerController.view addSubview:self.promptLabel];
+            self.resetTransform = 0;
+            // Add rotation notification
+            [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(didRotateDeviceChangeNotification:)
+                                                         name:UIDeviceOrientationDidChangeNotification
+                                                       object:nil];
         }
 
         // CDVImagePicker specific property
